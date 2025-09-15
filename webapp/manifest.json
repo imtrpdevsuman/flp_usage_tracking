@@ -1,0 +1,50 @@
+{
+  "_version": "1.12.0",
+  "sap.app": {
+    "id": "test_a",
+    "type": "application",
+    "applicationVersion": {
+      "version": "0.0.1"
+    }
+  },
+  "sap.ui5": {
+    "rootView": {
+      "viewName": "test_a.view.App",
+      "type": "XML",
+      "id": "app"
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "viewPath": "test_a.view",
+        "controlId": "appContainer", 
+        "controlAggregation": "pages",
+        "async": true
+      },
+      "routes": [
+        {
+          "pattern": "",
+          "name": "App",
+          "target": "App"
+        },
+        {
+          "pattern": "View1",
+          "name": "View1",
+          "target": "View1"
+        }
+      ],
+      "targets": {
+        "App": {
+          "viewName": "App",
+          "viewLevel": 1
+        },
+        "View1": {
+          "viewName": "View1",
+          "viewLevel": 2
+        }
+      }
+    },
+    "flexEnabled": true
+  }
+}

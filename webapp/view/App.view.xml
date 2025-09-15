@@ -1,0 +1,18 @@
+<mvc:View
+    controllerName="test_a.controller.App"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+
+    <App id="appContainer">
+        <pages>
+            <Page id="AppPage" title="Main App">
+                <content>
+                    <Button
+                        id="App_btnGoToView1"
+                        text="Go to View1"
+                        press=".onNavToView1"/>
+                </content>
+            </Page>
+        </pages>
+    </App>
+</mvc:View>
