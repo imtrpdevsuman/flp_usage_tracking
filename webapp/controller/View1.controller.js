@@ -9,6 +9,18 @@ sap.ui.define([
         onInit: function () {
             LoggingService.logAction("View1", "View1Init", "PageLoad");
             this._attachButtonLogging(this.getView(), "View1");
+
+            // Add sample data for chart
+            var oData = {
+                sales: [
+                    { quarter: "Q1", revenue: 200 },
+                    { quarter: "Q2", revenue: 350 },
+                    { quarter: "Q3", revenue: 500 },
+                    { quarter: "Q4", revenue: 400 }
+                ]
+            };
+            var oModel = new sap.ui.model.json.JSONModel(oData);
+            this.getView().setModel(oModel);
         },
 
         _attachButtonLogging: function (oView, sPage) {

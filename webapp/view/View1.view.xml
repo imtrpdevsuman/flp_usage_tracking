@@ -2,32 +2,120 @@
     controllerName="test_a.controller.View1"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
-    xmlns:core="sap.ui.core">
+    xmlns:core="sap.ui.core"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:vd="sap.viz.ui5.data"
+    xmlns:vf="sap.viz.ui5.controls.common.feeds">
 
-    <Page id="View1Page" title="View1 Page">
+    <Page id="View1Page" title="Employee Analytics">
+
+        <!-- Header -->
+        <customHeader>
+            <Toolbar id="View1_HeaderToolbar">
+                <content>
+                    <Title id="View1_HeaderTitle" text="Employee Dashboard" level="H2"/>
+                    <ToolbarSpacer id="View1_HeaderSpacer"/>
+                    <Button id="View1_btnHelp" text="Help" type="Transparent" press=".onButtonPress"/>
+                    <Button id="View1_btnLogout" text="Logout" type="Reject" press=".onButtonPress"/>
+                </content>
+            </Toolbar>
+        </customHeader>
+
         <content>
-            <Button
-                id="View1_btnClickMe"
-                text="Click Me"
-                press=".onButtonPress" />
-            <Button
-                id="View1_btnNavBack"
-                text="Go Back"
-                press=".onNavBack" />
 
-            <Input
-                id="View1_inputExample"
-                placeholder="Type something..."
-                liveChange=".onInputChange" />
+            <!-- Filters -->
+            <VBox id="View1_VBoxFilters" class="sapUiSmallMargin sapUiLargeMarginBottom">
+                <Toolbar id="View1_ToolbarFilters">
+                    <content>
+                        <Title id="View1_TitleFilters" text="Filters" level="H3"/>
+                    </content>
+                </Toolbar>
 
-            <Select
-                id="View1_selectExample"
-                change=".onSelectChange">
+                <HBox id="View1_HBoxFilters" alignItems="Center" justifyContent="SpaceBetween">
+                    <Input id="View1_inputSearch" placeholder="Search Employee..." liveChange=".onInputChange"/>
+                    <Select id="View1_selectDepartment" change=".onSelectChange">
+                        <items>
+                            <core:Item id="View1_selectDeptHR" key="HR" text="HR"/>
+                            <core:Item id="View1_selectDeptIT" key="IT" text="IT"/>
+                            <core:Item id="View1_selectDeptSales" key="Sales" text="Sales"/>
+                        </items>
+                    </Select>
+                    <DatePicker id="View1_dateHire" placeholder="Hire Date" change=".onInputChange"/>
+                    <Switch id="View1_switchActive" state="true" change=".onSwitchToggle"/>
+                    <Slider id="View1_sliderRating" min="1" max="10" value="5" liveChange=".onSliderChange"/>
+                </HBox>
+            </VBox>
+
+            <!-- Table -->
+            <Toolbar id="View1_ToolbarTable">
+                <content>
+                    <Title id="View1_TitleTable" text="Employee List" level="H3"/>
+                    <ToolbarSpacer id="View1_TableSpacer"/>
+                    <Button id="View1_btnAdd" icon="sap-icon://add" text="Add" press=".onButtonPress"/>
+                    <Button id="View1_btnDelete" icon="sap-icon://delete" text="Delete" press=".onButtonPress"/>
+                </content>
+            </Toolbar>
+
+            <Table id="View1_tableEmployees" inset="false" items="{/employees}">
+                <columns>
+                    <Column id="View1_colID"><Text id="View1_colIDText" text="ID"/></Column>
+                    <Column id="View1_colName"><Text id="View1_colNameText" text="Name"/></Column>
+                    <Column id="View1_colDept"><Text id="View1_colDeptText" text="Department"/></Column>
+                    <Column id="View1_colRole"><Text id="View1_colRoleText" text="Role"/></Column>
+                </columns>
                 <items>
-                    <core:Item id="View1_selectExample_Item1" key="1" text="Option 1"/>
-                    <core:Item id="View1_selectExample_Item2" key="2" text="Option 2"/>
+                    <!-- Template row; bound items will clone this; keep an id for flex -->
+                    <ColumnListItem id="View1_tableItem" type="Active" press=".onTableRowPress">
+                        <cells>
+                            <Text id="View1_cellID" text="{id}"/>
+                            <Text id="View1_cellName" text="{name}"/>
+                            <Text id="View1_cellDept" text="{department}"/>
+                            <Text id="View1_cellRole" text="{role}"/>
+                        </cells>
+                    </ColumnListItem>
                 </items>
-            </Select>
+            </Table>
+
+            <!-- Chart -->
+            <Toolbar id="View1_ToolbarChart">
+                <content>
+                    <Title id="View1_TitleChart" text="Sales by Quarter" level="H3"/>
+                </content>
+            </Toolbar>
+
+            <!-- Correct namespaces below:
+                 viz:VizFrame (sap.viz.ui5.controls)
+                 vd:FlattenedDataset, vd:DimensionDefinition, vd:MeasureDefinition (sap.viz.ui5.data)
+                 vf:FeedItem (sap.viz.ui5.controls.common.feeds)
+            -->
+            <viz:VizFrame id="View1_chartSales" height="400px" width="100%" vizType="column" selectData=".onChartSelect">
+                <viz:dataset>
+                    <vd:FlattenedDataset id="View1_chartDataset" data="{/sales}">
+                        <vd:dimensions>
+                            <vd:DimensionDefinition id="View1_dimQuarter" name="Quarter" value="{quarter}"/>
+                        </vd:dimensions>
+                        <vd:measures>
+                            <vd:MeasureDefinition id="View1_measureRevenue" name="Revenue" value="{revenue}"/>
+                        </vd:measures>
+                    </vd:FlattenedDataset>
+                </viz:dataset>
+                <viz:feeds>
+                    <vf:FeedItem id="View1_feedCategory" uid="categoryAxis" type="Dimension" values="Quarter"/>
+                    <vf:FeedItem id="View1_feedValue" uid="valueAxis" type="Measure" values="Revenue"/>
+                </viz:feeds>
+            </viz:VizFrame>
+
         </content>
+
+        <!-- Footer -->
+        <footer>
+            <Toolbar id="View1_FooterToolbar">
+                <content>
+                    <ToolbarSpacer id="View1_FooterSpacer"/>
+                    <Button id="View1_btnSave" text="Save" type="Emphasized" press=".onButtonPress"/>
+                    <Button id="View1_btnCancel" text="Cancel" type="Reject" press=".onButtonPress"/>
+                </content>
+            </Toolbar>
+        </footer>
     </Page>
 </mvc:View>
